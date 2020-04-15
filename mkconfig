@@ -1,0 +1,19 @@
+CC = tcc
+LD = tcc
+ROOT = /usr/local
+
+X11 = /usr/X11R6
+X11INC = $X11/include
+X11LIB = $X11/lib
+
+USR = /usr
+USRINC = $USR/include
+USRLIB = $USR/lib
+
+# Comment it on *BSD.
+ADDCPPFLAGS = $ADDCPPFLAGS -DHAVE_SHADOW_H
+# Uncomment on NetBSD.
+#ADDCPPFLAGS = $ADDCPPFLAGS -D_BSD_SOURCE -D_NETBSD_SOURCE
+
+#ADDCFLAGS = -O3 -static -std=c99
+#ADDCFLAGS = -Os -pedantic -std=c99

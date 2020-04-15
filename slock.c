@@ -70,15 +70,15 @@ dontkillme(void)
 	if (!(f = fopen(oomfile, "w"))) {
 		if (errno == ENOENT)
 			return;
-		die("slock: fopen %s: %s\n", oomfile, strerror(errno));
+		die("xlck: fopen %s: %s\n", oomfile, strerror(errno));
 	}
 	fprintf(f, "%d", OOM_SCORE_ADJ_MIN);
 	if (fclose(f)) {
 		if (errno == EACCES)
-			die("slock: unable to disable OOM killer. "
-			    "Make sure to suid or sgid slock.\n");
+			die("xlck: unable to disable OOM killer. "
+			    "Make sure to suid or sgid xlck.\n");
 		else
-			die("slock: fclose %s: %s\n", oomfile, strerror(errno));
+			die("xlck: fclose %s: %s\n", oomfile, strerror(errno));
 	}
 }
 #endif
@@ -93,9 +93,9 @@ gethash(void)
 	errno = 0;
 	if (!(pw = getpwuid(getuid()))) {
 		if (errno)
-			die("slock: getpwuid: %s\n", strerror(errno));
+			die("xlck: getpwuid: %s\n", strerror(errno));
 		else
-			die("slock: cannot retrieve password entry\n");
+			die("xlck: cannot retrieve password entry\n");
 	}
 	hash = pw->pw_passwd;
 
@@ -103,20 +103,20 @@ gethash(void)
 	if (!strcmp(hash, "x")) {
 		struct spwd *sp;
 		if (!(sp = getspnam(pw->pw_name)))
-			die("slock: getspnam: cannot retrieve shadow entry. "
-			    "Make sure to suid or sgid slock.\n");
+			die("xlck: getspnam: cannot retrieve shadow entry. "
+			    "Make sure to suid or sgid xlck.\n");
 		hash = sp->sp_pwdp;
 	}
 #else
 	if (!strcmp(hash, "*")) {
 #ifdef __OpenBSD__
 		if (!(pw = getpwuid_shadow(getuid())))
-			die("slock: getpwnam_shadow: cannot retrieve shadow entry. "
-			    "Make sure to suid or sgid slock.\n");
+			die("xlck: getpwnam_shadow: cannot retrieve shadow entry. "
+			    "Make sure to suid or sgid xlck.\n");
 		hash = pw->pw_passwd;
 #else
-		die("slock: getpwuid: cannot retrieve shadow entry. "
-		    "Make sure to suid or sgid slock.\n");
+		die("xlck: getpwuid: cannot retrieve shadow entry. "
+		    "Make sure to suid or sgid xlck.\n");
 #endif /* __OpenBSD__ */
 	}
 #endif /* HAVE_SHADOW_H */
@@ -161,7 +161,7 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 				passwd[len] = '\0';
 				errno = 0;
 				if (!(inputhash = crypt(passwd, hash)))
-					fprintf(stderr, "slock: crypt: %s\n", strerror(errno));
+					fprintf(stderr, "xlck: crypt: %s\n", strerror(errno));
 				else
 					running = !!strcmp(inputhash, hash);
 				if (running) {
@@ -289,10 +289,10 @@ lockscreen(Display *dpy, struct xrandr *rr, int screen)
 
 	/* we couldn't grab all input: fail out */
 	if (ptgrab != GrabSuccess)
-		fprintf(stderr, "slock: unable to grab mouse pointer for screen %d\n",
+		fprintf(stderr, "xlck: unable to grab mouse pointer for screen %d\n",
 		        screen);
 	if (kbgrab != GrabSuccess)
-		fprintf(stderr, "slock: unable to grab keyboard for screen %d\n",
+		fprintf(stderr, "xlck: unable to grab keyboard for screen %d\n",
 		        screen);
 	return NULL;
 }
@@ -300,7 +300,7 @@ lockscreen(Display *dpy, struct xrandr *rr, int screen)
 static void
 usage(void)
 {
-	die("usage: slock [-v] [cmd [arg ...]]\n");
+	die("Usage: xlck[-v] [cmd [arg ...]]\n");
 }
 
 int
@@ -317,7 +317,7 @@ main(int argc, char **argv) {
 
 	ARGBEGIN {
 	case 'v':
-		fprintf(stderr, "slock-"VERSION"\n");
+		fprintf(stderr, "xlck-"VERSION"\n");
 		return 0;
 	default:
 		usage();
@@ -326,12 +326,12 @@ main(int argc, char **argv) {
 	/* validate drop-user and -group */
 	errno = 0;
 	if (!(pwd = getpwnam(user)))
-		die("slock: getpwnam %s: %s\n", user,
+		die("xlck: getpwnam %s: %s\n", user,
 		    errno ? strerror(errno) : "user entry not found");
 	duid = pwd->pw_uid;
 	errno = 0;
 	if (!(grp = getgrnam(group)))
-		die("slock: getgrnam %s: %s\n", group,
+		die("xlck: getgrnam %s: %s\n", group,
 		    errno ? strerror(errno) : "group entry not found");
 	dgid = grp->gr_gid;
 
@@ -342,18 +342,18 @@ main(int argc, char **argv) {
 	hash = gethash();
 	errno = 0;
 	if (!crypt("", hash))
-		die("slock: crypt: %s\n", strerror(errno));
+		die("xlck: crypt: %s\n", strerror(errno));
 
 	if (!(dpy = XOpenDisplay(NULL)))
-		die("slock: cannot open display\n");
+		die("xlck: cannot open display\n");
 
 	/* drop privileges */
 	if (setgroups(0, NULL) < 0)
-		die("slock: setgroups: %s\n", strerror(errno));
+		die("xlck: setgroups: %s\n", strerror(errno));
 	if (setgid(dgid) < 0)
-		die("slock: setgid: %s\n", strerror(errno));
+		die("xlck: setgid: %s\n", strerror(errno));
 	if (setuid(duid) < 0)
-		die("slock: setuid: %s\n", strerror(errno));
+		die("xlck: setuid: %s\n", strerror(errno));
 
 	/* check for Xrandr support */
 	rr.active = XRRQueryExtension(dpy, &rr.evbase, &rr.errbase);
@@ -361,7 +361,7 @@ main(int argc, char **argv) {
 	/* get number of screens in display "dpy" and blank them */
 	nscreens = ScreenCount(dpy);
 	if (!(locks = calloc(nscreens, sizeof(struct lock *))))
-		die("slock: out of memory\n");
+		die("xlck: out of memory\n");
 	for (nlocks = 0, s = 0; s < nscreens; s++) {
 		if ((locks[s] = lockscreen(dpy, &rr, s)) != NULL)
 			nlocks++;
@@ -378,12 +378,12 @@ main(int argc, char **argv) {
 	if (argc > 0) {
 		switch (fork()) {
 		case -1:
-			die("slock: fork failed: %s\n", strerror(errno));
+			die("xlck: fork failed: %s\n", strerror(errno));
 		case 0:
 			if (close(ConnectionNumber(dpy)) < 0)
-				die("slock: close: %s\n", strerror(errno));
+				die("xlck: close: %s\n", strerror(errno));
 			execvp(argv[0], argv);
-			fprintf(stderr, "slock: execvp %s: %s\n", argv[0], strerror(errno));
+			fprintf(stderr, "xlck: execvp %s: %s\n", argv[0], strerror(errno));
 			_exit(1);
 		}
 	}
