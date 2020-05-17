@@ -1,6 +1,7 @@
 CC = tcc
 LD = tcc
-ROOT = /usr/local
+ROOT = $HOME/local
+BIN = $ROOT/bin
 
 X11 = /usr/X11R6
 X11INC = $X11/include

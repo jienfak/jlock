@@ -1,24 +1,11 @@
-slock - simple screen locker
-============================
-simple screen locker utility for X.
+xlck - X screen locker.
+Needs root rights to work by default is installed with SU-bit.
+Installation:
+	$ vi mkconfig # Edit installation configuration.
+	$ mk install
+In installation it will use "sudo" so don't be scared. It's needed rights to lock the screen.
+By default is installed into $HOME/local/bin.
+To run the program execute the binary. After entering the password it will unblock the screen.
+Configuration is made through "config.h" and editing source files.
 
-
-Requirements
-------------
-In order to build slock you need the Xlib header files.
-
-
-Installation
-------------
-Edit config.mk to match your local setup (slock is installed into
-the /usr/local namespace by default).
-
-Afterwards enter the following command to build and install slock
-(if necessary as root):
-
-    make clean install
-
-
-Running slock
--------------
-Simply invoke the 'slock' command. To get out of it, enter your password.
+Program is based on "slock" by Suckless. Thank them please.
