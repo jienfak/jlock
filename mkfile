@@ -18,8 +18,9 @@ $TGT : $OBJ
 install : $TGT
 	sudo cp -f $TGT $BIN/
 	sudo chmod 0755 $BIN/$TGT
-	# SU-bit installation.
 	sudo chmod u+s $BIN/$TGT
+	mkdir -p $MAN/1
+	sed 's/NAME/'$NAME'/'<man > $MAN/1/$NAME
 uninstall: 
 	rm -f $ROOT/bin/$TGT
 clean :

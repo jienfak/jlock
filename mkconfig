@@ -11,8 +11,13 @@ VERSION = 1.4
 
 # Root for installation.
 ROOT = $HOME/local
-#Binary file installation directory.
+# Binary file installation directory.
 BIN = $ROOT/bin
+# Man file installation directory.
+# (It's very different from common man pages, so install it not in default dir.
+# It's suited to be read by the markdown browser or as text file.)
+SHARE = $ROOT/share
+MAN = $SHARE/man
 
 # X11.
 X11 = /usr/X11R6

@@ -8,4 +8,6 @@ By default is installed into $HOME/local/bin.
 To run the program execute the binary. After entering the password it will unblock the screen.
 Configuration is made through "config.h" and editing source files.
 
+More information in "man".
+
 Program is based on "slock" by Suckless. Thank them please.
