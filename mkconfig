@@ -1,20 +1,60 @@
+# Compiler.
 CC = tcc
-LD = tcc
+# Linker.
+LD = $CC
+
+# Program name.
+NAME = xlck
+
+# Version.
+VERSION = 1.4
+
+# Root for installation.
 ROOT = $HOME/local
+#Binary file installation directory.
 BIN = $ROOT/bin
 
+# X11.
 X11 = /usr/X11R6
-X11INC = $X11/include
-X11LIB = $X11/lib
+X11INC = -I$X11/include
+X11LIB = -L$X11/lib -lX11
+XEXTLIB = -lXext
+XRRLIB = -lXrandr
 
-USR = /usr
-USRINC = $USR/include
-USRLIB = $USR/lib
+# USR.
+USRINC = -I/usr/include
+USRLIB = -L/usr/lib
 
-# Comment it on *BSD.
-ADDCPPFLAGS = $ADDCPPFLAGS -DHAVE_SHADOW_H
-# Uncomment on NetBSD.
+# FreeType.
+FTINC = -I/usr/include/freetype2
+FTLIB = -lfreetype
+
+# Other.
+CLIB = -lc
+CRYPTLIB = -lcrypt
+DOTINC = -I.
+
+# Additional flags for preprocessor, compiler and linker.
+ADDCPPFLAGS =
+ADDCFLAGS =
+ADDLDFLAGS =
+
+# System specific: (Uncomment)
+# *BSD.
+#ADDCPPFLAGS = $ADDCPPFLAGS -DHAVE_SHADOW_H
+# NetBSD.
 #ADDCPPFLAGS = $ADDCPPFLAGS -D_BSD_SOURCE -D_NETBSD_SOURCE
 
-#ADDCFLAGS = -O3 -static -std=c99
-#ADDCFLAGS = -Os -pedantic -std=c99
+# After this line isn't supposed to be edited.
+INC = $DOTINC $USRINC $X11INC
+LIB = $USRLIB $CLIB $CRYPTLIB \
+	$X11LIB $XEXTLIB $XRRLIB
+CPPFLAGS = $INC \
+	-DVERSION=\"$VERSION\" \
+	-D_DEFAULT_SOURCE -DHAVE_SHADOW_H \
+	$ADDCPPFLAGS
+CFLAGS = \
+	$ADDCFLAGS
+LDFLAGS = -s \
+	$LIB \
+	$ADDLDFLAGS 
