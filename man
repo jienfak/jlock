@@ -1,12 +1,12 @@
 NAME(1)
 ## Name
-NAME - X screen locker.
+`NAME` - X screen locker.
 
 ## Synopsis
-NAME [-v] [cmd [arg ...]]
+`NAME` [-v] [cmd [arg ...]]
 
 ## Description
-NAME is a simple X screen locker. If provided, **cmd [arg ...]** is
+`NAME` is a simple X screen locker. If provided, **cmd [arg ...]** is
 executed after the screen has been locked.
 
 ## Options
@@ -29,4 +29,4 @@ for maximum security:
 ``
 
 ## Customization
-NAME can be cusomized by changing config.h and recompiling the source code.
+`NAME` can be cusomized by changing config.h and recompiling the source code.
