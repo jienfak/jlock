@@ -1,28 +1,32 @@
 NAME(1)
-# Name
+## Name
 NAME - X screen locker.
 
-# Synopsis
+## Synopsis
 NAME [-v] [cmd [arg ...]]
 
-# Description
+## Description
 NAME is a simple X screen locker. If provided, **cmd [arg ...]** is
 executed after the screen has been locked.
 
-# Options
+## Options
  **-v**	Print version information to stdout and exit.
 
-# Security considerations.
+## Security considerations
 To make sure a locked screen can not by bypassed by switching WS or killing the
 X server with Ctrl+Alt+Backspace, it is recommended to disable both in xorg.conf(5)
 for maximum security:
-`` Section "ServerFlags"
-	Option "DontVTSwitch" "True"
-	Option "DontZap" "True"
-End ``
+``
+	Section "ServerFlags"
+		Option "DontVTSwitch" "True"
+		Option "DontZap" "True"
+	End
+``
 
-# Examples
-> $ NAME /usr/sbin/s2ram
+## Examples
+``
+	$ NAME /usr/sbin/s2ram
+``
 
-# Customization
-	NAME can be cusomized by changing config.h and recompiling the source code.
+## Customization
+NAME can be cusomized by changing config.h and recompiling the source code.
